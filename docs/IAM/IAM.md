@@ -163,4 +163,10 @@ aws iam attach-role-policy --role-name MyEC2Role --policy-arn arn:aws:iam::aws:p
   
 ---
 Jenkins나 Git처럼 온프레미스 또는 외부 환경에서 동작하는 CI/CD 도구를 통해 AWS 리소스에 접근하는 경우 는 "AWS 외부에서 실행되는 애플리케이션"의 키를 생성한다.  
+  
 
+- GitHub Actions 연동: GitHub 리포지토리의 Settings → Security → Secret and variables → Actions 에 에서 New repository secret 버튼을 클릭한다.
+  - 값에는 해당하는 Access Key ID를 입력하고, 또 다른 secret을 생성해 이름을 `AWS_SECRET_ACCESS_KEY`로,
+  - 값에는 Secret Access Key를 입력하면 됩니다.  
+
+이렇게 등록된 secret은 워크플로우 파일 내에서 secrets.AWS_ACCESS_KEY_ID 및 secrets.AWS_SECRET_ACCESS_KEY로 참조하여, 별도의 aws configure 없이 AWS CLI를 사용할 수 있게 됩니다.
