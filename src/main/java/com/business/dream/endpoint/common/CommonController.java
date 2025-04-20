@@ -21,10 +21,6 @@ public class CommonController {
         return "UP";
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "test";
-    }
 
 
 }
