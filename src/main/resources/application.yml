@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: aws-basic
+
+server:
+  port: 80
+
