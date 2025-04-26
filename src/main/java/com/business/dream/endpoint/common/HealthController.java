@@ -2,6 +2,7 @@ package com.business.dream.endpoint.common;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <b> HealthController </b>
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @since 2025-04-03
  */
 
-@Controller
+@RestController
 public class HealthController {
 
     @GetMapping("/health")
