@@ -2,10 +2,9 @@ package com.business.dream.endpoint.common;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * <b> CommonController </b>
+ * <b> HealthController </b>
  *
  * @author jh.park
  * @version 0.1.0
@@ -13,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 
 @Controller
-@RequestMapping("/api/common")
-public class CommonController {
+public class HealthController {
 
-    @GetMapping("/health-check")
+    @GetMapping("/health")
     public String healthCheck() {
         return "UP";
     }
