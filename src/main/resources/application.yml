@@ -1,6 +1,19 @@
 spring:
   application:
-    name: aws-basic
+    name: aws-
+  datasource:
+    url: jdbc:mysql://my-app-db.cdko8k2k6hyr.ap-northeast-2.rds.amazonaws.com:3306/app
+    username: userName
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+
 
 server:
   port: 80
