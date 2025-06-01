@@ -3,12 +3,12 @@ spring:
     name: aws-basic
 
 server:
-  port: 80
+  port: 8080
 
 # AWS S3 설정
 aws:
   s3:
-    bucket: my-spring-bucket  # 실제 버킷 이름으로 변경
+    bucket: my-app-static-files-storage
     region: ap-northeast-2    # 서울 리전
   credentials:
     access-key: ${AWS_ACCESS_KEY_ID:}

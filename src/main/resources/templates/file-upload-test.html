@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S3 파일 업로드 테스트</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { background-color: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .result { margin-top: 20px; padding: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>S3 파일 업로드 테스트</h1>
+
+    <!-- 단일 파일 업로드 -->
+    <form id="uploadForm">
+        <div class="form-group">
+            <label for="file">파일 선택:</label>
+            <input type="file" id="file" name="file" required>
+        </div>
+
+        <div class="form-group">
+            <label for="directory">디렉토리:</label>
+            <select id="directory" name="directory">
+                <option value="uploads">uploads</option>
+                <option value="images">images</option>
+                <option value="documents">documents</option>
+                <option value="videos">videos</option>
+            </select>
+        </div>
+
+        <button type="submit">파일 업로드</button>
+    </form>
+
+    <!-- 다중 파일 업로드 -->
+    <hr style="margin: 30px 0;">
+    <h2>다중 파일 업로드</h2>
+    <form id="multipleUploadForm">
+        <div class="form-group">
+            <label for="files">파일들 선택:</label>
+            <input type="file" id="files" name="files" multiple required>
+        </div>
+
+        <div class="form-group">
+            <label for="multiDirectory">디렉토리:</label>
+            <select id="multiDirectory" name="directory">
+                <option value="uploads">uploads</option>
+                <option value="images">images</option>
+                <option value="documents">documents</option>
+                <option value="videos">videos</option>
+            </select>
+        </div>
+
+        <button type="submit">다중 파일 업로드</button>
+    </form>
+
+    <!-- 결과 출력 영역 -->
+    <div id="result"></div>
+</div>
+
+<script>
+    // 단일 파일 업로드
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        const fileInput = document.getElementById('file');
+        const directory = document.getElementById('directory').value;
+
+        formData.append('file', fileInput.files[0]);
+        formData.append('directory', directory);
+
+        try {
+            const response = await fetch('/api/files/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showResult(result, 'success');
+            } else {
+                showResult(result, 'error');
+            }
+        } catch (error) {
+            showResult({ message: '업로드 실패: ' + error.message }, 'error');
+        }
+    });
+
+    // 다중 파일 업로드
+    document.getElementById('multipleUploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        const filesInput = document.getElementById('files');
+        const directory = document.getElementById('multiDirectory').value;
+
+        for (let file of filesInput.files) {
+            formData.append('files', file);
+        }
+        formData.append('directory', directory);
+
+        try {
+            const response = await fetch('/api/files/upload-multiple', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showResult(result, 'success');
+            } else {
+                showResult(result, 'error');
+            }
+        } catch (error) {
+            showResult({ message: '업로드 실패: ' + error.message }, 'error');
+        }
+    });
+
+    function showResult(data, type) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.className = `result ${type}`;
+
+        if (Array.isArray(data)) {
+            // 다중 파일 결과
+            let html = '<h3>업로드 결과:</h3>';
+            data.forEach((file, index) => {
+                html += `
+                        <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #ccc;">
+                            <strong>파일 ${index + 1}:</strong><br>
+                            <strong>원본명:</strong> ${file.fileName}<br>
+                            <strong>저장명:</strong> ${file.storedFileName}<br>
+                            <strong>URL:</strong> <a href="${file.fileUrl}" target="_blank">${file.fileUrl}</a><br>
+                            <strong>크기:</strong> ${(file.fileSize / 1024).toFixed(2)} KB<br>
+                            <strong>타입:</strong> ${file.contentType}
+                        </div>
+                    `;
+            });
+            resultDiv.innerHTML = html;
+        } else if (data.fileName) {
+            // 단일 파일 결과
+            resultDiv.innerHTML = `
+                    <h3>업로드 성공!</h3>
+                    <strong>원본 파일명:</strong> ${data.fileName}<br>
+                    <strong>저장된 파일명:</strong> ${data.storedFileName}<br>
+                    <strong>파일 URL:</strong> <a href="${data.fileUrl}" target="_blank">${data.fileUrl}</a><br>
+                    <strong>파일 크기:</strong> ${(data.fileSize / 1024).toFixed(2)} KB<br>
+                    <strong>파일 타입:</strong> ${data.contentType}<br>
+                    <strong>업로드 시간:</strong> ${data.uploadTime}
+                `;
+        } else {
+            // 에러 메시지
+            resultDiv.innerHTML = `<h3>오류:</h3>${data.message || JSON.stringify(data)}`;
+        }
+    }
+</script>
+</body>
+</html>
