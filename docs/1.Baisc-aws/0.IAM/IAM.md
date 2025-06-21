@@ -34,9 +34,9 @@ AWS IAM은 AWS 리소스에 대한 접근 제어를 위한 서비스입니다. I
 ### 2.3 사용자(User) 생성
 
 1. **Users** 메뉴를 클릭한 후, **Add user** 버튼을 누릅니다.  
-  ![img.png](../img/img.png)
+  ![img.png](../../img/img.png)
 2. 사용자 이름을 입력합니다.
-   - ![img.png](../img/img_2.png)
+   - ![img.png](../../img/img_2.png)
 3. 권한 선택 (CI/CD 구축 예제를 위해):
    - **AmazonEC2ContainerRegistryFullAccess** – ECR(Elastic Container Registry)에 Docker 이미지를 푸시/풀 권한 (이미지 레지스트리 사용).
    - **AmazonEKSFullAccess** – EKS 클러스터를 생성하고 관리할 수 있는 권한 (EKS 사용 시). *(생략 가능: 클러스터 생성/관리를 수동으로 할 경우 필요 없음)*
@@ -44,7 +44,7 @@ AWS IAM은 AWS 리소스에 대한 접근 제어를 위한 서비스입니다. I
 4. 다음 단계에서 그룹에 추가하거나 개별 정책을 첨부해 권한을 부여합니다
 
 ### 2.4 그룹(Group) 생성 및 권한 부여
-![img_1.png](../img/img_1.png)
+![img_1.png](../../img/img_1.png)
 1. **Groups** 메뉴에서 **Create New Group**을 클릭합니다.
 2. 그룹 이름을 지정합니다.
 3. 그룹에 부여할 관리형 정책(예: AmazonS3ReadOnlyAccess, AmazonEC2FullAccess 등)을 선택합니다.
@@ -137,7 +137,7 @@ aws iam attach-role-policy --role-name MyEC2Role --policy-arn arn:aws:iam::aws:p
 ---
 
 ### 액세스 키 발급
-![img_3.png](../img/img_3.png)  
+![img_3.png](../../img/img_3.png)  
 
 ## 1. Command Line Interface(CLI)
 
