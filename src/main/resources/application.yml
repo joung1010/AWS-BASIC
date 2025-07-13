@@ -1,7 +1,23 @@
 spring:
   application:
     name: aws-basic
+  datasource:
+    url: jdbc:mysql://my-app-db.cdko8k2k6hyr.ap-northeast-2.rds.amazonaws.com:3306/app # RDS 인스턴스 엔드포인트
+    username: ENC(gosgOear082tS6cguXr3RQ==)
+    password: ENC(iIQH7Rnw8DW+PLu2Ve2XdyGUb9nBajPBqK94xrUwUYs=)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect  # 이 줄 추가
+    show-sql: true
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: Kx7vQ9mP2nR8sL3wE6tY1uI4oA5zX0cV7bN9fG2hJ8kM
 
 server:
   port: 80
-
